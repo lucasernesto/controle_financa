@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+
+</head>
+<body>
+    <h1>Your form</h1>
+    <form method="POST" action="{{ url_for('form') }}">
+        {{ form.csrf_token }}
+        {{ form.username.label }}
+        {{ form.username }}
+        <ul>
+        {% for error in form.username.errors %}
+            <li style="color:red;">{{ error }}</li>
+        {% endfor %}
+        </ul>
+        {{ form.password.label }}
+        {{ form.password }}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
