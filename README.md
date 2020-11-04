@@ -1,2 +1,2 @@
-# estoque_lc
-Projeto para controle de estoque da loja de camisas
+# CONTROLE DE FINANÇAS
+Um site que fará o controle de finança de cada usuário logado
