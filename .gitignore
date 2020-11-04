@@ -1,0 +1,64 @@
+/web/timesheet-env
+timesheet-env
+*.zip
+
+# Temporary and binary files
+*~
+*.py[cod]
+*.so
+*.cfg
+!setup.cfg
+!luigi.cfg
+*.orig
+*.log
+*.pot
+__pycache__/*
+.cache/*
+.*.swp
+/web/cache
+/web/log.log*
+
+# Project files
+.ropeproject
+.project
+.pydevproject
+.settings
+.idea
+.vscode/*
+
+# Package files
+*.egg
+*.eggs/
+.installed.cfg
+*.egg-info
+
+# Unittest and coverage
+htmlcov/*
+.coverage
+.tox
+junit.xml
+coverage.xml
+
+# Build and docs folder/files
+build/*
+dist/*
+sdist/*
+docs/api/*
+docs/_build/*
+cover/*
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints
+
+# Virtual environment
+env/*
+.env/*
+venv/*
+.venv/*
+
+# Flask Assets
+/web/static/.webassets-cache
+/web/static/css/packed.css
+/web/static/css/packed-datatable.css
+/web/static/js/packed.js
+/web/static/js/packed-datatable.js
