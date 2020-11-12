@@ -1,0 +1,16 @@
+<form action="" method="post">
+  {{ form.csrf_token }}
+  <p>
+    {{form.email.label}}<br>
+    {{form.email(size=30)}}<br>
+  </p>
+  <p>
+    {{form.username.label}}<br>
+    {{form.username(size=30)}}<br>
+  </p>
+  <p>
+    {{form.password.label}}<br>
+    {{form.password(size=30)}}<br>
+  </p>
+  <input type="submit" name="" id="" value="Save">
+</form>

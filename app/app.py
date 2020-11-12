@@ -1,21 +1,17 @@
-from flask import Flask, render_template
-from forms.forms import *
+from flask import Flask, render_template, request
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 
+from models.forms import *
+from models.tables import User
+
 app = Flask(__name__)
 db = SQLAlchemy(app)
+db.init_app(app)
 app.config['SECRET_KEY'] = 'thisisasecretkey'
-
-class User(db.Model):
-    __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-
-    def __repr__(self):
-        return '<User %r>' % self.username
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
 
 @app.route("/form", methods=['GET', 'POST'])
@@ -30,18 +26,15 @@ def form():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = RegisterForm()
-    #TODO Corrigir erro no validate da Form
+
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        new_user = User(form.email.data, form.username.data, form.password.data)
         db.session.add(new_user)
         db.session.commit()
-
-        return '<h1>New user has been created!</h1>'
-    else:
-        print("asdasda")
+        return "PODE IR DORMIR"
 
     return render_template('signup.html', form=form)
 
 if __name__ == "__main__":
+    db.create_all()
     app.run(debug=True)
