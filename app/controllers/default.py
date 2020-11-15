@@ -5,13 +5,10 @@ from app.models.forms import RegisterForm
 from app.models.tables import User
 from passlib.hash import sha256_crypt
 
-@app.route("/form", methods=['GET', 'POST'])
-def form():
-    form = LoginForm()
-
-    if form.validate():
-        return 'The form has beem submit'
-    return render_template('form.html', form=form)
+@app.route("/")
+@app.route("/index")
+def index():
+    return render_template('index.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
