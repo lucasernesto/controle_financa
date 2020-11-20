@@ -1,8 +1,8 @@
 from flask import render_template
 
 from app import app, db
-from app.models.forms import RegisterForm
-from app.models.tables import User
+from app.models.forms import RegisterForm, RegisterGastoForm
+from app.models.tables import User, Gasto
 from passlib.hash import sha256_crypt
 
 @app.route("/")
@@ -22,3 +22,18 @@ def signup():
         db.session.commit()
 
     return render_template('signup.html', form=form)
+
+
+@app.route('/gasto', methods=['GET', 'POST'])
+def gasto():
+    form = RegisterGastoForm()
+
+    if form.validate_on_submit():
+        data = form.data.data
+        new_gasto = Gasto(form.valor.data, form.data.data, form.produto.data)
+        db.session.add(new_gasto)
+        db.session.commit()
+    else:
+        print("aaaa")
+
+    return render_template('gasto.html', form=form)
