@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="sidenav">
+    <div class="login-main-text">
+        <h2>Finance<br> Página de Login</h2>
+        <p>Faça Login ou cadastre-se para acessar.</p>
+    </div>
+    </div>
+    <div class="main">
+        <div class="col-md-6 col-sm-12">
+        <div class="login-form">
+            <form>
+                <p>
+                    {{form.username.label}}<br>
+                    {{form.username(size=30)}}<br>
+                </p>
+                <p>
+                    {{form.password.label}}<br>
+                    {{form.password(size=30)}}<br>
+                </p>
+                <button type="submit" class="btn btn-dark">Login</button>
+            </form>
+        </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</div>  
+{% endblock %}
