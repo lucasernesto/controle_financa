@@ -1,4 +1,7 @@
-from flask import render_template, flash, request, abort
+import pendulum
+from pendulum.parsing.exceptions import ParserError
+
+from flask import render_template, flash, request, abort, redirect
 from flask_login import login_user
 
 from app import app, db, login_manager
@@ -6,57 +9,55 @@ from app.models.forms import RegisterForm, RegisterGastoForm, LoginForm
 from app.models.tables import User, Gasto
 from passlib.hash import sha256_crypt
 
+
 @app.route("/")
 @app.route("/index")
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
     form = RegisterForm()
 
     if form.validate_on_submit():
         password = sha256_crypt.encrypt(form.password.data)
-        new_user = User(email=form.email.data, username=form.username.data, password=password)
-        print(new_user)
+        new_user = User(
+            email=form.email.data, username=form.username.data, password=password
+        )
         db.session.add(new_user)
         db.session.commit()
-    else:
-        print("ELSE ELSE")
 
-    return render_template('signup.html', form=form)
+    return render_template("signup.html", form=form)
 
 
-@app.route('/gasto', methods=['GET', 'POST'])
+@app.route("/gasto", methods=["GET", "POST"])
 def gasto():
     form = RegisterGastoForm()
-
+    try:
+        x = pendulum.parse(str(form.date.data))
+    except ParserError:
+        ...
+    #TODO Corrigir erro de não conseguir pegar float no campo valor
     if form.validate_on_submit():
-        data = form.data.data
-        new_gasto = Gasto(form.valor.data, form.data.data, form.produto.data)
+        mes = pendulum.parse(str(form.date.data)).month
+        new_gasto = Gasto(id_user=1, valor=form.valor.data, data=form.date.data, produto=form.produto.data, mes=mes)
         db.session.add(new_gasto)
         db.session.commit()
-    else:
-        print("aaaa")
 
-    return render_template('gasto.html', form=form)
+    return render_template("gasto.html", form=form)
 
-@app.route('/login', methods=['GET', 'POST'])
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    # Here we use a class of some kind to represent and validate our
-    # client-side form data. For example, WTForms is a library that will
-    # handle this for us, and we use a custom LoginForm to validate.
     form = LoginForm()
-    if form.validate_on_submit():
-        # Login and validate the user.
-        # user should be an instance of your `User` class
-        
-        login_user(user)
 
-        flash('Logged in successfully.')
+    if request.method == "POST":
+        if form.validate_on_submit():
+            user = User.query.filter_by(username=form.username.data).first()
+            login_user(user)
+            flash("Logged in successfully.")
+            return redirect(next or flask.url_for("index"))
 
-        return redirect(next or flask.url_for('index'))
-    else:
-        print("aaaaaaaa")
-    return render_template('login.html', form=form)
+
+    return render_template("login.html", form=form)
