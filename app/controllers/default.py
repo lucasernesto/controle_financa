@@ -1,7 +1,7 @@
 import pendulum
 from pendulum.parsing.exceptions import ParserError
 
-from flask import render_template, flash, request, abort
+from flask import render_template, flash, request, abort, redirect
 from flask_login import login_user
 
 from app import app, db, login_manager
@@ -41,9 +41,6 @@ def gasto():
         x = pendulum.parse(str(form.date.data))
     except ParserError:
         ...
-    print("\ndata: ", form.date.data)
-    print("\nvalor: ", form.valor.data)
-    print("\nproduto: ", form.produto.data)
     #TODO Corrigir erro de não conseguir pegar float no campo valor
     if form.validate_on_submit():
         mes = pendulum.parse(str(form.date.data)).month
@@ -57,12 +54,13 @@ def gasto():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
-    if form.validate_on_submit():
-        login_user(user)
 
-        flash("Logged in successfully.")
+    if request.method == "POST":
+        if form.validate_on_submit():
+            user = User.query.filter_by(username=form.username.data).first()
+            login_user(user)
+            flash("Logged in successfully.")
+            return redirect(next or flask.url_for("index"))
 
-        return redirect(next or flask.url_for("index"))
-    else:
-        print("aaaaaaaa")
+
     return render_template("login.html", form=form)
