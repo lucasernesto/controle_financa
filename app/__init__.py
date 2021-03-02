@@ -4,12 +4,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 app = Flask(__name__)
-# passando arquivos de config atraves de um arquivo sem sua extensao
 app.config.from_object('config')
-# recebe a instancia do flask definida acima
-db = SQLAlchemy(app)
-login_manager = LoginManager()
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+db = SQLAlchemy(app)
+    
+
+@login_manager.user_loader
+def load_user(user_id):
+    return tables.User.query.filter_by(id=user_id).first()
 
 # python3 import completo do modulo, nao pode ser relativo
 from app.models import tables, forms

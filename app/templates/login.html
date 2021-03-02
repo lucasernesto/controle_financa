@@ -10,7 +10,8 @@
     <div class="main">
         <div class="col-md-6 col-sm-12">
         <div class="login-form">
-            <form>
+            <form action="" method="POST">
+                {{ form.csrf_token }}
                 <p>
                     {{form.username.label}}<br>
                     {{form.username(size=30)}}<br>
