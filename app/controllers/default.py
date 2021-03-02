@@ -38,18 +38,19 @@ def gasto():
         x = pendulum.parse(str(form.date.data))
     except ParserError:
         ...
-    # TODO Corrigir erro de não conseguir pegar float no campo valor
-    if form.validate_on_submit():
-        mes = pendulum.parse(str(form.date.data)).month
-        new_gasto = Gasto(
-            id_user=1,
-            valor=form.valor.data,
-            data=form.date.data,
-            produto=form.produto.data,
-            mes=mes,
-        )
-        db.session.add(new_gasto)
-        db.session.commit()
+
+    if request.method == "POST":
+        if form.validate():
+            mes = pendulum.parse(str(form.date.data)).month
+            new_gasto = Gasto(
+                id_user=1,
+                valor=form.valor.data,
+                data=form.date.data,
+                produto=form.produto.data,
+                mes=mes,
+            )
+            db.session.add(new_gasto)
+            db.session.commit()
 
     return render_template("gasto.html", form=form)
 
