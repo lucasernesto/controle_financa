@@ -25,11 +25,8 @@ def signup():
         new_user = User(
             email=form.email.data, username=form.username.data, password=password
         )
-        print(new_user)
         db.session.add(new_user)
         db.session.commit()
-    else:
-        print("ELSE ELSE")
 
     return render_template("signup.html", form=form)
 
