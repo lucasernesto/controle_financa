@@ -23,7 +23,7 @@ class User(db.Model):
 
     def get_id(self):
         """Return the email address to satisfy Flask-Login's requirements."""
-        return self.email
+        return self.id
 
     def is_authenticated(self):
         """Return True if the user is authenticated."""
