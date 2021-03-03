@@ -1,3 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-justify d-flex justify-content-center">Sign up</h1>
+<div class="d-flex justify-content-center">
 <form action="" method="post">
   {{ form.csrf_token }}
   <p>
@@ -12,5 +17,8 @@
     {{form.password.label}}<br>
     {{form.password(size=30)}}<br>
   </p>
-  <input type="submit" name="" id="" value="Save">
+  <input type="submit" name="" id="" value="Sign up">
 </form>
+</div>
+
+{% endblock %}

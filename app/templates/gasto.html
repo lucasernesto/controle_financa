@@ -1,16 +1,24 @@
-<form action="" method="post">
-        {{ form.csrf_token }}
-    <p>
-        {{form.valor.label}}<br>
-        {{form.valor(size=30)}}<br>
-    </p>
-    <p>
-        {{ form.date.label }}<br>
-        {{ form.date(size=30) }}<br>
-    </p>
-    <p>
-        {{form.produto.label}}<br>
-        {{form.produto(size=30)}}<br>
-    </p>
-    <input type="submit" name="" id="" value="Save">
-</form>
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-justify d-flex justify-content-center"> Cadastrar novo gasto</h1>
+
+<div class="d-flex justify-content-center">
+    <form action="" method="post">
+            {{ form.csrf_token }}
+        <p>
+            {{form.valor.label}}<br>
+            {{form.valor(size=30)}}<br>
+        </p>
+        <p>
+            {{ form.date.label }}<br>
+            {{ form.date(size=30) }}<br>
+        </p>
+        <p>
+            {{form.produto.label}}<br>
+            {{form.produto(size=30)}}<br>
+        </p>
+        <input type="submit" name="" id="" value="Save">
+    </form>
+</div>
+{% endblock %}

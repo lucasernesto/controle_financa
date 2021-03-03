@@ -1,6 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class="text-justify">OLÁ, BEM VINDO AO FINANCE, SEU SITE DE CONTROLE PARA FINANÇAS</h1>
-<h2 class="text-justify">DAQUI A UM TEMPO ELE FICA MAIS BONITO :P</h2>
+
+<h1 class="text-justify d-flex justify-content-center">Login</h1>
+
+<div class="main">
+    <div class="d-flex justify-content-center">
+    <div class="login-form">
+        <form action="" method="POST">
+            {{ form.csrf_token }}
+            <p>
+                {{form.username.label}}<br>
+                {{form.username(size=30)}}<br>
+            </p>
+            <p>
+                {{form.password.label}}<br>
+                {{form.password(size=30)}}<br>
+            </p>
+            <button type="submit" class="btn btn-dark">Login</button>
+        </form>
+    </div>
+    </div>
+</div>
+
 {% endblock %}
