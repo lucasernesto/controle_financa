@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- <h1>Olá {{ current_user.username }}, você está logado ao finance!</h1> -->
+    <h1 class="text-justify"> Cadastrar novo gasto</h1>
+
+    <div class="container">
+        <div class="row">
+        <div class="col-sm-6">
+            <form action="" method="post">
+                    {{ form.csrf_token }}
+                <p>
+                    {{form.valor.label}}<br>
+                    {{form.valor(size=30)}}<br>
+                </p>
+                <p>
+                    {{ form.date.label }}<br>
+                    {{ form.date(size=30) }}<br>
+                </p>
+                <p>
+                    {{form.produto.label}}<br>
+                    {{form.produto(size=30)}}<br>
+                </p>
+                <input type="submit" name="" id="" value="Save">
+            </form>
+        </div>
+
+            <div class="col-sm-6">
+                <h2>Aqui ficara seus gastos mensais</h2>                
+            </div>
+        </div>
+    </div>
+{% endblock %}
