@@ -1,8 +1,9 @@
-import pendulum
+import pendulum, flask
 from pendulum.parsing.exceptions import ParserError
 
-from flask import render_template, flash, request, abort, redirect, url_for, abort
+from flask import render_template, flash, request, abort, redirect, url_for, abort, get_flashed_messages
 from flask_login import login_user, login_required, current_user, logout_user
+from sqlalchemy.exc import IntegrityError
 
 from app import app, db, login_manager
 from app.models.forms import RegisterForm, RegisterGastoForm, LoginForm
@@ -35,7 +36,10 @@ def signup():
             email=form.email.data, username=form.username.data, password=password
         )
         db.session.add(new_user)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError:
+            flash(u"Email já cadastrado", 'error')
 
     return render_template("signup.html", form=form)
 
