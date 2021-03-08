@@ -24,10 +24,23 @@
                 <input type="submit" name="" id="" value="Save">
             </form>
         </div>
-
-            <div class="col-sm-6">
-                <h2>Aqui ficara seus gastos mensais</h2>                
-            </div>
+        <div class="col-sm-6">
+            <h2>Gastos Mensais</h2>
+            <table class="table">
+                <tr>
+                    <th>Produto</th>
+                    <th>Valor</th>
+                    <th>Data</th>
+                </tr>
+                {% for row in rows %}
+                <tr scope="row">
+                    <td>{{ row.produto }}</td>
+                    <td>{{ row.valor }}</td>
+                    <td>{{ row.data }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
         </div>
     </div>
 {% endblock %}

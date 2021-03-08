@@ -72,7 +72,7 @@ def login():
     return redirect(url_for('index'))
 
 
-@app.route("/home")
+@app.route("/home", methods=['GET', 'POST'])
 @login_required
 def home():
     form = RegisterGastoForm()
@@ -94,7 +94,9 @@ def home():
             db.session.add(new_gasto)
             db.session.commit()
 
-    return render_template("home.html", form=form)
+    rows = Gasto.query.filter_by(id_user=current_user.id).all()
+
+    return render_template("home.html", form=form, rows=rows)
 
 @app.route("/logout")
 @login_required
