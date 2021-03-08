@@ -94,7 +94,10 @@ def home():
             db.session.add(new_gasto)
             db.session.commit()
 
-    rows = Gasto.query.filter_by(id_user=current_user.id).all()
+    #TODO fazer pesquisar mes e aparecer os resultador que o usuario deseja
+    mes = 3
+
+    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes).all()
 
     return render_template("home.html", form=form, rows=rows)
 
