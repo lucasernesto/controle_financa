@@ -25,18 +25,20 @@
             </form>
         </div>
         <div class="col-sm-6">
-            <h2>Gastos Mensais</h2>
+            <h1 class="text-justify">Gastos do mês atual</h1>
             <table class="table">
                 <tr>
                     <th>Produto</th>
                     <th>Valor</th>
                     <th>Data</th>
+                    <th>Total: </th>
+                    <td>R${{ total }}</td>
                 </tr>
                 {% for row in rows %}
                 <tr scope="row">
                     <td>{{ row.produto }}</td>
                     <td>{{ row.valor }}</td>
-                    <td>{{ row.data }}</td>
+                    <td>{{ row.data.strftime("%d/%m/%Y") }}</td>
                 </tr>
                 {% endfor %}
             </table>

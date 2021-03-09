@@ -76,17 +76,14 @@ def login():
 @login_required
 def home():
     form = RegisterGastoForm()
-    try:
-        x = pendulum.parse(str(form.date.data))
-    except ParserError:
-        ...
 
     if request.method == "POST":
         if form.validate():
+
             mes = pendulum.parse(str(form.date.data)).month
             new_gasto = Gasto(
                 id_user=current_user.id,
-                valor=form.valor.data,
+                valor=format(form.valor.data, '.2g'),
                 data=form.date.data,
                 produto=form.produto.data,
                 mes=mes,
@@ -98,8 +95,9 @@ def home():
     mes = 3
 
     rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes).all()
+    total = get_total(rows)
 
-    return render_template("home.html", form=form, rows=rows)
+    return render_template("home.html", form=form, rows=rows, total=total)
 
 @app.route("/logout")
 @login_required
@@ -107,3 +105,11 @@ def logout():
     logout_user()
 
     return redirect(url_for("index"))
+
+
+def get_total(rows):
+    total = 0
+    for row in rows:
+        total += row.valor
+    
+    return total
