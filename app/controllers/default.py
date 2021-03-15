@@ -1,8 +1,18 @@
-import pendulum
+import pendulum, flask
 from pendulum.parsing.exceptions import ParserError
 
-from flask import render_template, flash, request, abort, redirect, url_for, abort
+from flask import (
+    render_template,
+    flash,
+    request,
+    abort,
+    redirect,
+    url_for,
+    abort,
+    get_flashed_messages,
+)
 from flask_login import login_user, login_required, current_user, logout_user
+from sqlalchemy.exc import IntegrityError
 
 from app import app, db, login_manager
 from app.models.forms import RegisterForm, RegisterGastoForm, LoginForm
@@ -16,12 +26,15 @@ def index():
     form = LoginForm()
 
     if request.method == "POST":
-        if form.validate_on_submit():
-            user = User.query.filter_by(username=form.username.data).first()
-            login_user(user)
-            
-        return redirect(url_for('home'))
+        user = User.query.filter_by(username=form.username.data).first()
 
+        if form.validate_on_submit() and sha256_crypt.verify(
+            form.password.data, user.password
+        ):
+            login_user(user)
+            return redirect(url_for("home"))
+
+        flash("USUARIO OU SENHA INCORRETOS")
     return render_template("index.html", form=form)
 
 
@@ -30,14 +43,18 @@ def signup():
     form = RegisterForm()
 
     if form.validate_on_submit():
-        password = sha256_crypt.encrypt(form.password.data)
+        password = sha256_crypt.encrypt(str(form.password.data))
         new_user = User(
             email=form.email.data, username=form.username.data, password=password
         )
         db.session.add(new_user)
-        db.session.commit()
+        try:
+            db.session.commit()
+        except IntegrityError:
+            flash(u"Email já cadastrado", "error")
 
     return render_template("signup.html", form=form)
+
 
 @app.route("/gasto", methods=["GET", "POST"])
 @login_required
@@ -59,30 +76,27 @@ def gasto():
                 mes=mes,
             )
             db.session.add(new_gasto)
-            db.session.commit()    
+            db.session.commit()
     return render_template("gasto.html", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    return redirect(url_for('index'))
+    return redirect(url_for("index"))
 
 
-@app.route("/home")
+@app.route("/home", methods=["GET", "POST"])
 @login_required
 def home():
     form = RegisterGastoForm()
-    try:
-        x = pendulum.parse(str(form.date.data))
-    except ParserError:
-        ...
 
     if request.method == "POST":
         if form.validate():
+
             mes = pendulum.parse(str(form.date.data)).month
             new_gasto = Gasto(
                 id_user=current_user.id,
-                valor=form.valor.data,
+                valor=format(form.valor.data, ".2g"),
                 data=form.date.data,
                 produto=form.produto.data,
                 mes=mes,
@@ -90,7 +104,14 @@ def home():
             db.session.add(new_gasto)
             db.session.commit()
 
-    return render_template("home.html", form=form)
+    # TODO fazer pesquisar mes e aparecer os resultador que o usuario deseja
+    mes = 3
+
+    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes).all()
+    total = get_total(rows)
+
+    return render_template("home.html", form=form, rows=rows, total=total)
+
 
 @app.route("/logout")
 @login_required
@@ -98,3 +119,11 @@ def logout():
     logout_user()
 
     return redirect(url_for("index"))
+
+
+def get_total(rows):
+    total = 0
+    for row in rows:
+        total += row.valor
+
+    return total
