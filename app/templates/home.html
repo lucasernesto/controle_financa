@@ -13,9 +13,8 @@
                     {{form.valor.label}}<br>
                     {{form.valor(size=30)}}<br>
                 </p>
-                <p>
                     {{ form.date.label }}<br>
-                    {{ form.date(size=30) }}<br>
+                    {{ form.date(size=30)}}
                 </p>
                 <p>
                     {{form.produto.label}}<br>
@@ -45,4 +44,15 @@
         </div>
         </div>
     </div>
+
+<script language=javascript type="text/javascript">
+    var data = new Date();
+    var dia = String(data. getDate()). padStart(2, '0');
+    var mes = String(data. getMonth() + 1). padStart(2, '0');
+    var ano = data. getFullYear();
+    dataAtual = dia + '/' + mes + '/' + ano;
+    console.log(dataAtual);
+    
+    document.getElementsByName('date')[0].value = dataAtual
+</script>    
 {% endblock %}
