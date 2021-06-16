@@ -105,7 +105,7 @@ def home():
             db.session.commit()
 
     # TODO fazer pesquisar mes e aparecer os resultador que o usuario deseja
-    mes = 3
+    mes = pendulum.today().month
 
     rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes).all()
     total = get_total(rows)
