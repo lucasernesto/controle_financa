@@ -38,20 +38,18 @@ class Gasto(db.Model):
     __tablename__ = "gastos"
     id = db.Column(db.Integer, primary_key=True)
     id_user = db.Column(db.Integer, ForeignKey('users.id'))
+    nome = db.Column(db.Text, nullable=False)
     valor = db.Column(db.Float, nullable=False)
-    data = db.Column(db.DateTime, nullable=False)
-    produto = db.Column(db.Text)
+    tipo = db.Column(db.Text)
+    data = db.Column(db.DateTime, nullable=True)
+    dia_vencimento = db.Column(db.Integer)
     mes = db.Column(db.Integer)
 
-    def __init__(self, id_user, valor, data, produto, mes):
+    def __init__(self, id_user, nome, valor, tipo, data, dia_vencimento, mes):
         self.id_user = id_user
+        self.nome = nome
         self.valor = valor
+        self.tipo = tipo
         self.data = data
-        self.produto = produto
+        self.dia_vencimento = dia_vencimento
         self.mes = mes
-
-    def __repr__(self):
-        if self.produto:
-            return '<Gasto %r>' % self.produto
-
-        return '<Gasto %r>' % self.id

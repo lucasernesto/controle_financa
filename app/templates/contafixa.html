@@ -2,7 +2,7 @@
 
 {% block content %}
     <!-- <h1>Olá {{ current_user.username }}, você está logado ao finance!</h1> -->
-    <h1 class="text-justify"> Cadastrar novo gasto</h1>
+    <h1 class="text-justify"> Cadastrar conta fixa</h1>
 
     <div class="container">
         <div class="row">
@@ -10,28 +10,28 @@
             <form action="" method="post">
                     {{ form.csrf_token }}
                 <p>
+                    <p>Conta</p>
+                    {{form.nome(size=30)}}<br>
+                </p>
+                <p>
                     {{form.valor.label}}<br>
                     {{form.valor(size=30)}}<br>
                 </p>
-                    {{ form.date.label }}<br>
-                    {{ form.date(size=30)}}
+                    <p>Dia de vencimento</p>
+                    {{form.dia_vencimento(size=30)}}
                 </p>
                 <p>
-                    {{form.nome.label}}<br>
-                    {{form.nome(size=30)}}<br>
                 </p>
                 <input type="submit" name="" id="" value="Save">
             </form>
         </div>
         <div class="col-sm-6">
-            <h1 class="text-justify">Gastos do mês atual</h1>
+            <h1 class="text-justify">Contas fixas</h1>
             <table class="table">
                 <tr>
-                    <th>Produto</th>
+                    <th>Conta</th>
                     <th>Valor</th>
-                    <th>tipo</th>
-                    <th>Vencimento: </th>
-                    <th>Data</th>
+                    <th>Dia de vencimento</th>
                     <th>Total: </th>
                     <td>R${{ total }}</td>
                 </tr>
@@ -39,11 +39,7 @@
                 <tr scope="row">
                     <td>{{ row.nome }}</td>
                     <td>{{ row.valor }}</td>
-                    <td>{{ row.tipo }}</td>
                     <td>{{ row.dia_vencimento }}</td>
-                    {% if row.data %}
-                    <td>{{ row.data.strftime("%d/%m/%Y") }}</td>
-                    {% endif %}
                 </tr>
                 {% endfor %}
             </table>
