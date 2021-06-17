@@ -80,6 +80,31 @@ def gasto():
     return render_template("gasto.html", form=form)
 
 
+@app.route("/contafixa", methods=["GET", "POST"])
+@login_required
+def contafixa():
+    form = RegisterGastoForm()
+
+    if request.method == "POST":
+        if form.validate():
+            new_mensalidade = Gasto(
+                id_user=current_user.id,
+                nome=form.nome.data,
+                valor=form.valor.data,
+                tipo="conta fixa",
+                data=None,
+                dia_vencimento=form.dia_vencimento.data,
+                mes=pendulum.today().month,
+            )
+            db.session.add(new_mensalidade)
+            db.session.commit()
+
+    rows = Gasto.query.filter_by(id_user=current_user.id, tipo="conta fixa").all()
+    total = get_total(rows)
+
+    return render_template("contafixa.html", form=form, rows=rows, total=total)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     return redirect(url_for("index"))
@@ -92,13 +117,14 @@ def home():
 
     if request.method == "POST":
         if form.validate():
-
             mes = pendulum.parse(str(form.date.data)).month
             new_gasto = Gasto(
                 id_user=current_user.id,
-                valor=format(form.valor.data, ".2g"),
+                nome=form.nome.data,
+                valor=form.valor.data,
+                tipo="gasto",
                 data=form.date.data,
-                produto=form.produto.data,
+                dia_vencimento="",
                 mes=mes,
             )
             db.session.add(new_gasto)

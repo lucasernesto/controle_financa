@@ -31,7 +31,10 @@ class RegisterForm(FlaskForm):
 
 class RegisterGastoForm(FlaskForm):
     #TODO Corrigir erro de não conseguir pegar float no campo valor
+    nome = StringField("nome")
     valor = FloatField("valor", validators=[InputRequired()])
-    date = DateField("data", format="%d/%m/%Y", validators=[InputRequired()])
-    produto = StringField("produto")
+    tipo = StringField("tipo")
+    date = DateField("data", format="%d/%m/%Y")
+    dia_vencimento = StringField("dia_vencimento")
+    conta_a_pagar = StringField("conta_a_pagar")
     mes = IntegerField("mes")
