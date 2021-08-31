@@ -1,24 +1,21 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block content %}
+<!-- <h1>Olá {{ current_user.username }}, você está logado ao finance!</h1> -->
+<h1 class="text-justify"> Cadastrar novo gasto</h1>
 
-{% block content %}
-    <!-- <h1>Olá {{ current_user.username }}, você está logado ao finance!</h1> -->
-    <h1 class="text-justify"> Cadastrar novo gasto</h1>
-
-    <div class="container">
-        <div class="row">
+<div class="container">
+    <div class="row">
         <div class="col-sm-6">
             <form action="" method="post">
-                    {{ form.csrf_token }}
+                {{ form.csrf_token }}
                 <p>
-                    {{form.valor.label}}<br>
-                    {{form.valor(size=30)}}<br>
+                    {{form.valor.label}}<br> {{form.valor(size=30)}}
+                    <br>
                 </p>
-                    {{ form.date.label }}<br>
-                    {{ form.date(size=30)}}
+                {{ form.date.label }}<br> {{ form.date(size=30)}}
                 </p>
                 <p>
-                    {{form.nome.label}}<br>
-                    {{form.nome(size=30)}}<br>
+                    {{form.nome.label}}<br> {{form.nome(size=30)}}
+                    <br>
                 </p>
                 <input type="submit" name="" id="" value="Save">
             </form>
@@ -27,6 +24,7 @@
             <h1 class="text-justify">Gastos do mês atual</h1>
             <table class="table" border="1">
                 <tr>
+                    <th>Pago</th>
                     <th>Produto</th>
                     <th>Valor</th>
                     <th>tipo</th>
@@ -37,7 +35,10 @@
                 </tr>
                 {% for row in rows %}
                 <tr scope="row">
-                    <td><button class="btn btn-dark">delete</button></td>
+                    <td>
+                        <input type="checkbox" id="switch" />
+                        <label for="switch" id="toggle">Toggle</label>
+                    </td>
                     <td>{{ row.nome }}</td>
                     <td>{{ row.valor }}</td>
                     <td>{{ row.tipo }}</td>
@@ -51,37 +52,77 @@
                 {% endfor %}
             </table>
         </div>
-        </div>
     </div>
+</div>
+
+<style>
+    #switch {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+    }
+    
+    #toggle {
+        text-indent: -9999px;
+        width: 80px;
+        height: 40px;
+        background: grey;
+        display: block;
+        border-radius: 100px;
+        position: relative;
+    }
+    
+    #toggle:after {
+        content: '';
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: 30px;
+        height: 30px;
+        background: #fff;
+        border-radius: 90px;
+        transition: 0.3s;
+    }
+    
+    input:checked+#toggle {
+        background: #bada55;
+    }
+    
+    input:checked+#toggle::after {
+        left: calc(100% - 35px);
+        transform: (translateX(-100%));
+    }
+    
+    #toggle:active:after {
+        width: 40px;
+    }
+</style>
 
 <script language=javascript type="text/javascript">
     var data = new Date();
-    var dia = String(data. getDate()). padStart(2, '0');
-    var mes = String(data. getMonth() + 1). padStart(2, '0');
-    var ano = data. getFullYear();
+    var dia = String(data.getDate()).padStart(2, '0');
+    var mes = String(data.getMonth() + 1).padStart(2, '0');
+    var ano = data.getFullYear();
     dataAtual = dia + '/' + mes + '/' + ano;
-    
+
     document.getElementsByName('date')[0].value = dataAtual
 
     var index, table = document.getElementsByClassName('table')[0];
-        console.log('table.rows.length');
-        console.log(table.rows.length);
-        console.log(table.rows[1]);
-        for(var i = 1; i < table.rows.length; i++)
-        {
-            console.log(table.rows[i].cells[3]);
-            table.rows[i].cells[4].onclick = function()
-            {
-                var c = confirm("do you want to delete this row");
-                if(c === true)
-                {
-                    index = this.parentElement.rowIndex;
-                    table.deleteRow(index);
-                }
-                
-                //console.log(index);
-            };
-            
-        }
-</script>    
+    console.log('table.rows.length');
+    console.log(table.rows.length);
+    console.log(table.rows[1]);
+    for (var i = 1; i < table.rows.length; i++) {
+        console.log(table.rows[i].cells[3]);
+        table.rows[i].cells[4].onclick = function() {
+            var c = confirm("do you want to delete this row");
+            if (c === true) {
+                index = this.parentElement.rowIndex;
+                table.deleteRow(index);
+            }
+
+            //console.log(index);
+        };
+
+    }
+</script>
 {% endblock %}
