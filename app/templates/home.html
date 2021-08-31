@@ -27,21 +27,28 @@
             <h1 class="text-justify">Gastos do mês atual</h1>
             <table class="table" border="1">
                 <tr>
+                    <th>Pago</th>
                     <th>Produto</th>
                     <th>Valor</th>
                     <th>tipo</th>
-                    <th>Vencimento: </th>
+                    <!-- <th>Vencimento: </th> -->
                     <th>Data</th>
                     <th>Total: </th>
                     <th>R${{ total }}</th>
                 </tr>
                 {% for row in rows %}
                 <tr scope="row">
-                    <td><button class="btn btn-dark">delete</button></td>
+                    <td>
+                        {% if row.pago == True %}
+                            <input type="checkbox" checked data-toggle="toggle" data-onstyle="primary">
+                        {% else %}
+                            <input type="checkbox" checked data-toggle="toggle" data-onstyle="primary">
+                        {% endif %}
+                    </td>
                     <td>{{ row.nome }}</td>
                     <td>{{ row.valor }}</td>
                     <td>{{ row.tipo }}</td>
-                    <td>{{ row.dia_vencimento }}</td>
+                    <!-- <td>{{ row.dia_vencimento }}</td> -->
                     {% if row.data %}
                     <td>{{ row.data.strftime("%d/%m/%Y") }}</td>
                     {% else %}

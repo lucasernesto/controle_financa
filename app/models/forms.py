@@ -8,6 +8,7 @@ from wtforms import (
     IntegerField,
     DateField,
 )
+from wtforms.fields.core import BooleanField
 from wtforms.validators import InputRequired, Email, Length, DataRequired
 
 
@@ -38,3 +39,4 @@ class RegisterGastoForm(FlaskForm):
     dia_vencimento = StringField("dia_vencimento")
     conta_a_pagar = StringField("conta_a_pagar")
     mes = IntegerField("mes")
+    pago = BooleanField("pago")
