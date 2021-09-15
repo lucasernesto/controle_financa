@@ -126,7 +126,7 @@ def home():
                 data=form.date.data,
                 dia_vencimento="",
                 mes=mes,
-                pago=False,
+                pago=False
             )
             db.session.add(new_gasto)
             db.session.commit()

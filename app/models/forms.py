@@ -9,6 +9,7 @@ from wtforms import (
     DateField,
     BooleanField,
 )
+from wtforms.fields.core import BooleanField
 from wtforms.validators import InputRequired, Email, Length, DataRequired
 
 
