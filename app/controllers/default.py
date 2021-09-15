@@ -1,4 +1,4 @@
-import pendulum, flask
+import pendulum, flask, werkzeug
 from pendulum.parsing.exceptions import ParserError
 
 from flask import (
@@ -126,6 +126,7 @@ def home():
                 data=form.date.data,
                 dia_vencimento="",
                 mes=mes,
+                pago=False
             )
             db.session.add(new_gasto)
             db.session.commit()
@@ -139,6 +140,20 @@ def home():
     return render_template("home.html", form=form, rows=rows, total=total)
 
 
+@app.route("/<int:id>/atualizar_pago", methods=["GET", "POST"])
+def atualizar_pago(id):
+    gasto = Gasto.query.filter_by(id_user=current_user.id, id=id, tipo="gasto").first()
+
+    if gasto.pago == True:
+        gasto.pago = False
+    else:
+        gasto.pago = True
+
+    db.session.commit()
+
+    return redirect(url_for("home"))
+
+
 @app.route("/logout")
 @login_required
 def logout():
@@ -150,6 +165,9 @@ def logout():
 def get_total(rows):
     total = 0
     for row in rows:
+        if row.pago:
+            continue
+
         total += row.valor
 
     return total
