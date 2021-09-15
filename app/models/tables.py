@@ -15,7 +15,7 @@ class User(db.Model):
         self.password = password
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return "<User %r>" % self.username
 
     def is_active(self):
         """True, as all users are active."""
@@ -37,15 +37,16 @@ class User(db.Model):
 class Gasto(db.Model):
     __tablename__ = "gastos"
     id = db.Column(db.Integer, primary_key=True)
-    id_user = db.Column(db.Integer, ForeignKey('users.id'))
+    id_user = db.Column(db.Integer, ForeignKey("users.id"))
     nome = db.Column(db.Text, nullable=False)
     valor = db.Column(db.Float, nullable=False)
     tipo = db.Column(db.Text)
     data = db.Column(db.DateTime, nullable=True)
     dia_vencimento = db.Column(db.Integer)
     mes = db.Column(db.Integer)
+    pago = db.Column(db.Boolean)
 
-    def __init__(self, id_user, nome, valor, tipo, data, dia_vencimento, mes):
+    def __init__(self, id_user, nome, valor, tipo, data, dia_vencimento, mes, pago):
         self.id_user = id_user
         self.nome = nome
         self.valor = valor
@@ -53,3 +54,4 @@ class Gasto(db.Model):
         self.data = data
         self.dia_vencimento = dia_vencimento
         self.mes = mes
+        self.pago = pago

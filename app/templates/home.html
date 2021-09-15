@@ -36,8 +36,11 @@
                 {% for row in rows %}
                 <tr scope="row">
                     <td>
-                      <input type="checkbox" id={{ row.id }} class="pago" />
-                        <label for="switch" id="toggle">Toggle</label>
+                        <form action="{{ url_for('atualizar_pago', id=row.id) }}" method="post">
+                            {% if row.pago %}
+                            <input onChange="this.form.submit()" type="checkbox" id={{ row.id }} value="$id" name="pago" checked/> {% else %}
+                            <input onChange="this.form.submit()" type="checkbox" id={{ row.id }} value="$id" name="pago" /> {% endif %}
+                        </form>
                     </td>
                     <td>{{ row.nome }}</td>
                     <td>{{ row.valor }}</td>
@@ -55,48 +58,6 @@
     </div>
 </div>
 
-<style>
-    #switch {
-        height: 0;
-        width: 0;
-        visibility: hidden;
-    }
-    
-    #toggle {
-        text-indent: -9999px;
-        width: 80px;
-        height: 40px;
-        background: grey;
-        display: block;
-        border-radius: 100px;
-        position: relative;
-    }
-    
-    #toggle:after {
-        content: '';
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        width: 30px;
-        height: 30px;
-        background: #fff;
-        border-radius: 90px;
-        transition: 0.3s;
-    }
-    
-    input:checked+#toggle {
-        background: #bada55;
-    }
-    
-    input:checked+#toggle::after {
-        left: calc(100% - 35px);
-        transform: (translateX(-100%));
-    }
-    
-    #toggle:active:after {
-        width: 40px;
-    }
-</style>
 
 <script language=javascript type="text/javascript">
     var data = new Date();
@@ -125,4 +86,5 @@
 
     }
 </script>
+
 {% endblock %}

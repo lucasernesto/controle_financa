@@ -7,6 +7,7 @@ from wtforms import (
     DateTimeField,
     IntegerField,
     DateField,
+    BooleanField,
 )
 from wtforms.validators import InputRequired, Email, Length, DataRequired
 
@@ -30,7 +31,8 @@ class RegisterForm(FlaskForm):
 
 
 class RegisterGastoForm(FlaskForm):
-    #TODO Corrigir erro de não conseguir pegar float no campo valor
+    # TODO Corrigir erro de não conseguir pegar float no campo valor
+
     nome = StringField("nome")
     valor = FloatField("valor", validators=[InputRequired()])
     tipo = StringField("tipo")
@@ -38,3 +40,4 @@ class RegisterGastoForm(FlaskForm):
     dia_vencimento = StringField("dia_vencimento")
     conta_a_pagar = StringField("conta_a_pagar")
     mes = IntegerField("mes")
+    pago = BooleanField("pago")
