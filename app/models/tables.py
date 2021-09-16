@@ -44,9 +44,12 @@ class Gasto(db.Model):
     data = db.Column(db.DateTime, nullable=True)
     dia_vencimento = db.Column(db.Integer)
     mes = db.Column(db.Integer)
+    ano = db.Column(db.Integer)
     pago = db.Column(db.Boolean)
 
-    def __init__(self, id_user, nome, valor, tipo, data, dia_vencimento, mes, pago):
+    def __init__(
+        self, id_user, nome, valor, tipo, data, dia_vencimento, mes, ano, pago
+    ):
         self.id_user = id_user
         self.nome = nome
         self.valor = valor
@@ -54,4 +57,5 @@ class Gasto(db.Model):
         self.data = data
         self.dia_vencimento = dia_vencimento
         self.mes = mes
+        self.ano = ano
         self.pago = pago
