@@ -89,7 +89,7 @@ def contafixa():
     ano = data.year
     if request.method == "POST":
         if form.validate():
-            mes=pendulum.today().month
+            mes = pendulum.today().month
 
             for x in range(0, form.meses_a_ficar.data):
                 new_mensalidade = Gasto(
@@ -101,18 +101,22 @@ def contafixa():
                     dia_vencimento=form.dia_vencimento.data,
                     mes=mes,
                     ano=ano,
-                    pago=False
+                    pago=False,
                 )
 
                 data = data.add(months=1)
-                mes = data.month                
+                mes = data.month
                 ano = data.year
                 db.session.add(new_mensalidade)
-            
-            db.session.commit()
-    
 
-    rows = Gasto.query.filter_by(id_user=current_user.id, tipo="conta fixa", mes=pendulum.today().month, ano=pendulum.today().year).all()
+            db.session.commit()
+
+    rows = Gasto.query.filter_by(
+        id_user=current_user.id,
+        tipo="conta fixa",
+        mes=pendulum.today().month,
+        ano=pendulum.today().year,
+    ).all()
     total = get_total(rows)
 
     return render_template("contafixa.html", form=form, rows=rows, total=total)
@@ -141,7 +145,7 @@ def home():
                 dia_vencimento="",
                 mes=mes,
                 ano=ano,
-                pago=False
+                pago=False,
             )
             db.session.add(new_gasto)
             db.session.commit()

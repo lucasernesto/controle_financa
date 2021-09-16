@@ -47,7 +47,9 @@ class Gasto(db.Model):
     ano = db.Column(db.Integer)
     pago = db.Column(db.Boolean)
 
-    def __init__(self, id_user, nome, valor, tipo, data, dia_vencimento, mes, ano, pago):
+    def __init__(
+        self, id_user, nome, valor, tipo, data, dia_vencimento, mes, ano, pago
+    ):
         self.id_user = id_user
         self.nome = nome
         self.valor = valor

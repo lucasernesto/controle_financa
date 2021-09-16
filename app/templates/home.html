@@ -38,8 +38,8 @@
                     <td>
                         <form action="{{ url_for('atualizar_pago', id=row.id) }}" method="post">
                             {% if row.pago %}
-                            <input onChange="this.form.submit()" type="checkbox" id={{ row.id }} value="$id" name="pago" checked/> {% else %}
-                            <input onChange="this.form.submit()" type="checkbox" id={{ row.id }} value="$id" name="pago" /> {% endif %}
+                            <input onChange="this.form.submit()" type="checkbox" id={{ row.id }} checked/> {% else %}
+                            <input onChange="this.form.submit()" type="checkbox" id={{ row.id }} /> {% endif %}
                         </form>
                     </td>
                     <td>{{ row.nome }}</td>
