@@ -41,4 +41,6 @@ class RegisterGastoForm(FlaskForm):
     dia_vencimento = StringField("dia_vencimento")
     conta_a_pagar = StringField("conta_a_pagar")
     mes = IntegerField("mes")
+    ano = IntegerField("ano")
     pago = BooleanField("pago")
+    meses_a_ficar = IntegerField("meses_a_ficar")

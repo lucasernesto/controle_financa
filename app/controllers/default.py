@@ -84,22 +84,35 @@ def gasto():
 @login_required
 def contafixa():
     form = RegisterGastoForm()
-
+    data = pendulum.today()
+    mes = data.month
+    ano = data.year
     if request.method == "POST":
         if form.validate():
-            new_mensalidade = Gasto(
-                id_user=current_user.id,
-                nome=form.nome.data,
-                valor=form.valor.data,
-                tipo="conta fixa",
-                data=None,
-                dia_vencimento=form.dia_vencimento.data,
-                mes=pendulum.today().month,
-            )
-            db.session.add(new_mensalidade)
-            db.session.commit()
+            mes=pendulum.today().month
 
-    rows = Gasto.query.filter_by(id_user=current_user.id, tipo="conta fixa").all()
+            for x in range(0, form.meses_a_ficar.data):
+                new_mensalidade = Gasto(
+                    id_user=current_user.id,
+                    nome=form.nome.data,
+                    valor=form.valor.data,
+                    tipo="conta fixa",
+                    data=None,
+                    dia_vencimento=form.dia_vencimento.data,
+                    mes=mes,
+                    ano=ano,
+                    pago=False
+                )
+
+                data = data.add(months=1)
+                mes = data.month                
+                ano = data.year
+                db.session.add(new_mensalidade)
+            
+            db.session.commit()
+    
+
+    rows = Gasto.query.filter_by(id_user=current_user.id, tipo="conta fixa", mes=pendulum.today().month, ano=pendulum.today().year).all()
     total = get_total(rows)
 
     return render_template("contafixa.html", form=form, rows=rows, total=total)
@@ -118,6 +131,7 @@ def home():
     if request.method == "POST":
         if form.validate():
             mes = pendulum.parse(str(form.date.data)).month
+            ano = pendulum.parse(str(form.date.data)).year
             new_gasto = Gasto(
                 id_user=current_user.id,
                 nome=form.nome.data,
@@ -126,6 +140,7 @@ def home():
                 data=form.date.data,
                 dia_vencimento="",
                 mes=mes,
+                ano=ano,
                 pago=False
             )
             db.session.add(new_gasto)
@@ -133,8 +148,8 @@ def home():
 
     # TODO fazer pesquisar mes e aparecer os resultador que o usuario deseja
     mes = pendulum.today().month
-
-    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes).all()
+    ano = pendulum.today().year
+    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).all()
     total = get_total(rows)
 
     return render_template("home.html", form=form, rows=rows, total=total)
@@ -142,7 +157,7 @@ def home():
 
 @app.route("/<int:id>/atualizar_pago", methods=["GET", "POST"])
 def atualizar_pago(id):
-    gasto = Gasto.query.filter_by(id_user=current_user.id, id=id, tipo="gasto").first()
+    gasto = Gasto.query.filter_by(id_user=current_user.id, id=id).first()
 
     if gasto.pago == True:
         gasto.pago = False
