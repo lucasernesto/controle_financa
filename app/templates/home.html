@@ -24,6 +24,7 @@
             <h1 class="text-justify">Gastos do mês atual</h1>
             <table class="table" border="1">
                 <tr>
+                    <th>Deletar gasto</th>
                     <th>Pago</th>
                     <th>Produto</th>
                     <th>Valor</th>
@@ -35,6 +36,11 @@
                 </tr>
                 {% for row in rows %}
                 <tr scope="row">
+                    <td>
+                      <form action="{{ url_for('deletar_gasto', id=row.id) }}" method="post">
+                        <button onclick="this.form.submit()" type="button" class="btn btn-danger">x</button> 
+                      </form>
+                    </td>
                     <td>
                         <form action="{{ url_for('atualizar_pago', id=row.id) }}" method="post">
                             {% if row.pago %}
