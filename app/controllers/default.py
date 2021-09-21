@@ -173,6 +173,15 @@ def atualizar_pago(id):
     return redirect(url_for("home"))
 
 
+@app.route("/<int:id>/deletar_gasto", methods=["GET", "POST"])
+def deletar_gasto(id):
+    gasto = Gasto.query.filter_by(id_user=current_user.id, id=id).first()
+
+    db.session.delete(gasto)
+    db.session.commit()
+    
+    return redirect(url_for("home"))
+
 @app.route("/logout")
 @login_required
 def logout():
