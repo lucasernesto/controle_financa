@@ -1,10 +1,10 @@
 {% extends 'base.html' %} {% block content %}
 <!-- <h1>Olá {{ current_user.username }}, você está logado ao finance!</h1> -->
-<h1 class="text-justify"> Cadastrar novo gasto</h1>
 
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
+          <h1 class="text-justify">Cadastrar novo gasto</h1>
             <form action="" method="post">
                 {{ form.csrf_token }}
                 <p>
@@ -38,7 +38,9 @@
                 <tr scope="row">
                     <td>
                       <form action="{{ url_for('deletar_gasto', id=row.id) }}" method="post">
-                        <button onclick="this.form.submit()" type="button" class="btn btn-danger">x</button> 
+                        <div class="col text-center">
+                          <button onclick="this.form.submit()" align="center" type="button" class="btn btn-danger btn-sm">x</button> 
+                        </div>
                       </form>
                     </td>
                     <td>
