@@ -2,11 +2,10 @@
 
 {% block content %}
     <!-- <h1>Olá {{ current_user.username }}, você está logado ao finance!</h1> -->
-    <h1 class="text-justify"> Cadastrar conta fixa</h1>
-
     <div class="container">
         <div class="row">
         <div class="col-sm-6">
+          <h1 class="text-justify"> Cadastrar conta fixa</h1>
             <form action="" method="post">
                     {{ form.csrf_token }}
                 <p>
@@ -31,7 +30,7 @@
         </div>
         <div class="col-sm-6">
             <h1 class="text-justify">Contas fixas</h1>
-            <table class="table">
+            <table class="table" border="1">
                 <tr>
                     <th>Conta</th>
                     <th>Valor</th>
