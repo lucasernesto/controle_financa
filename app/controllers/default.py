@@ -23,6 +23,9 @@ from passlib.hash import sha256_crypt
 @app.route("/", methods=["GET", "POST"])
 @app.route("/index", methods=["GET", "POST"])
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+
     form = LoginForm()
 
     if request.method == "POST":
@@ -40,6 +43,9 @@ def index():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    
     form = RegisterForm()
 
     if form.validate_on_submit():
@@ -181,6 +187,12 @@ def deletar_gasto(id):
     db.session.commit()
     
     return redirect(url_for("home"))
+
+
+@app.route("/relatorios")
+def relatorios():
+    return render_template("relatorios.html")
+
 
 @app.route("/logout")
 @login_required
