@@ -34,7 +34,7 @@
                     <th>Total: </th>
                     <th>R${{ total }}</th>
                 </tr>
-                {% for row in rows %}
+                {% for row in rows.items %}
                 <tr scope="row">
                     <td>
                       <form action="{{ url_for('deletar_gasto', id=row.id) }}" method="post">
@@ -62,6 +62,21 @@
                 </tr>
                 {% endfor %}
             </table>
+
+            <nav aria-label align="center">
+                <ul class="pagination">
+                    {% if rows.has_prev %}
+                        <li class="page-item"><a class="page-link" href="{{ rows.prev_num }}"> Anterior </a></li>
+                    {% endif %}
+                    {% for page in rows.iter_pages(left_edge=3, right_edge=3) %}
+                        <li class="page-item"><a class="page-link" href="{{ url_for('home', page_num=page) }}"> {{page}} </a></li>
+                    {% endfor %}
+                    {% if rows.has_next %}
+                        <li class="page-item"><a class="page-link" href="{{rows.next_num}}"> Próximo </a></li>
+                    {% endif %}
+                </ul>
+            </nav>                
+
         </div>
     </div>
 </div>
