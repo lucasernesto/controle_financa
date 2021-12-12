@@ -134,8 +134,9 @@ def login():
 
 
 @app.route("/home", methods=["GET", "POST"])
+@app.route("/home/<int:page_num>", methods=["GET", "POST"])
 @login_required
-def home():
+def home(page_num=1):
     form = RegisterGastoForm()
 
     if request.method == "POST":
@@ -159,8 +160,8 @@ def home():
     # TODO fazer pesquisar mes e aparecer os resultador que o usuario deseja
     mes = pendulum.today().month
     ano = pendulum.today().year
-    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).all()
-    total = get_total(rows)
+    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).paginate(per_page=5, page=page_num, error_out=True)
+    total = get_total(rows.items)
 
     return render_template("home.html", form=form, rows=rows, total=total)
 
