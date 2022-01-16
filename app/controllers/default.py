@@ -36,8 +36,9 @@ def index():
         ):
             login_user(user)
             return redirect(url_for("home"))
+        else:
+            flash("USUARIO OU SENHA INCORRETOS")
 
-        flash("USUARIO OU SENHA INCORRETOS")
     return render_template("index.html", form=form)
 
 
@@ -45,7 +46,7 @@ def index():
 def signup():
     if current_user.is_authenticated:
         return redirect(url_for("home"))
-    
+
     form = RegisterForm()
 
     if form.validate_on_submit():
@@ -57,7 +58,7 @@ def signup():
         try:
             db.session.commit()
         except IntegrityError:
-            flash(u"Email já cadastrado", "error")
+            flash(u"Email ou Nome de usuário já cadastrado", "error")
 
     return render_template("signup.html", form=form)
 
@@ -160,9 +161,12 @@ def home(page_num=1):
     # TODO fazer pesquisar mes e aparecer os resultador que o usuario deseja
     mes = pendulum.today().month
     ano = pendulum.today().year
-    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).paginate(per_page=5, page=page_num, error_out=True)
-    total = get_total(rows.items)
-
+    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).paginate(
+        per_page=5, page=page_num, error_out=True
+    )
+    total = get_total(
+        Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).all()
+    )
     return render_template("home.html", form=form, rows=rows, total=total)
 
 
@@ -186,7 +190,7 @@ def deletar_gasto(id):
 
     db.session.delete(gasto)
     db.session.commit()
-    
+
     return redirect(url_for("home"))
 
 
