@@ -8,14 +8,19 @@
             <form action="" method="post">
                 {{ form.csrf_token }}
                 <p>
-                    {{form.valor.label}}<br> {{form.valor(size=30)}}
+                    <h5>Nome</h5>
+                    {{form.nome(size=30)}}
                     <br>
                 </p>
-                {{ form.date.label }}<br> {{ form.date(size=30)}}
+
+                <p>
+                    <h5>Valor</h5>
+                    {{form.valor(size=30)}}
+                    <br>
                 </p>
                 <p>
-                    {{form.nome.label}}<br> {{form.nome(size=30)}}
-                    <br>
+                    <h5>Data</h5>
+                    {{ form.date(size=30)}}
                 </p>
                 <input type="submit" name="" id="" value="Save">
             </form>
