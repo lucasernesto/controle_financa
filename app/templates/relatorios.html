@@ -6,7 +6,75 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-  <h1>aqui ficarão os relatórios e dashboards</h1>
- 
+  <div class="container">
+    <h1>Relatórios mensais</h1>
+    <form  method="POST" action="{{url_for('relatorios')}}">
+    <select id='mes' name="mes" placeholder="Mês" onChange="this.form.submit()">
+      <option name="" value="">Selecione o mês</option>
+      <option name="Janeiro" value="1">Janeiro</option>
+      <option name="Fevereiro" value="2">Fevereiro</option>
+      <option name="Março" value="3">Março</option>
+      <option name="Abril" value="4">Abril</option>
+      <option name="Maio" value="5">Maio</option>
+      <option name="Junho" value="6">Junho</option>
+      <option name="Julho" value="7">Julho</option>
+      <option name="Agosto" value="8">Agosto</option>
+      <option name="Setembro" value="9">Setembro</option>
+      <option name="Outubro" value="10">Outubro</option>
+      <option name="Novembro" value="11">Novembro</option>
+      <option name="Dezembro" value="12">Dezembro</option>
+    </select>
+    </form>
+    </br>
+  </div>
+
+
+  <div class="col-sm-6">
+    <table class="table" border="1">
+        <tr>
+            <th>Produto</th>
+            <th>Valor</th>
+            <th>tipo</th>
+            <!-- <th>Vencimento: </th> -->
+            <th>Data</th>
+            <th>Total: </th>
+            <th>R${{ total }}</th>
+        </tr>
+        {% for row in rows.items %}
+        <tr scope="row">
+            <td>{{ row.nome }}</td>
+            <td>{{ row.valor }}</td>
+            <td>{{ row.tipo }}</td>
+            <!-- <td>{{ row.dia_vencimento }}</td> -->
+            {% if row.data %}
+            <td>{{ row.data.strftime("%d/%m/%Y") }}</td>
+            {% else %}
+            <td></td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <nav aria-label align="center">
+      <ul class="pagination">
+          {% if rows.has_prev %}
+              <li class="page-item"><a class="page-link" href="{{ url_for('relatorios', page_num=rows.prev_num, mes=mes) }}"> Anterior </a></li>
+          {% endif %}
+          {% for page in rows.iter_pages(left_edge=3, right_edge=3) %}
+              <li class="page-item"><a class="page-link" href="{{ url_for('relatorios', page_num=page, mes=mes) }}"> {{page}} </a></li>
+          {% endfor %}
+          {% if rows.has_next %}
+              <li class="page-item"><a class="page-link" href="{{ url_for('relatorios', page_num=rows.next_num, mes=mes) }}"> Próximo </a></li>
+          {% endif %}
+      </ul>
+    </nav> 
 </body>
+
+<script language=javascript type="text/javascript">
+  function run() {
+    a = document.getElementById("mes").value
+    var variable1 = "someString"
+  }
+</script>
+
 {% endblock %}
