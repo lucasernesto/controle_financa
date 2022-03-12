@@ -200,18 +200,27 @@ def deletar_gasto(id):
 @app.route("/relatorios/<int:mes>/<int:page_num>", methods=["GET", "POST"])
 @login_required
 def relatorios(mes=1, page_num=1):
+    ano = pendulum.now().year
+
     if flask.request.method == "POST":
         mes = request.form.get("mes")
+        ano = request.form.get("ano")
+        if ano == "":
+            ano = pendulum.now().year
 
-    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes).paginate(
+    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).paginate(
         per_page=5, page=page_num, error_out=True
     )
 
+    years = get_years(Gasto.query.filter_by(id_user=current_user.id).all())
+
     total = get_total(
-        Gasto.query.filter_by(id_user=current_user.id, mes=mes).all(), False
+        Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).all(), False
     )
 
-    return render_template("relatorios.html", rows=rows, total=total, mes=mes)
+    return render_template(
+        "relatorios.html", rows=rows, total=total, mes=mes, ano=ano, years=years
+    )
 
 
 @app.route("/logout")
@@ -230,3 +239,14 @@ def get_total(rows, pagamento=True):
         total += row.valor
 
     return total
+
+
+def get_years(rows):
+    years = []
+    for row in rows:
+        if row.ano in years:
+            continue
+
+        years.append(row.ano)
+
+    return years
