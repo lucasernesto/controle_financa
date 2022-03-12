@@ -42,7 +42,7 @@
                 {% for row in rows.items %}
                 <tr scope="row">
                     <td>
-                      <form action="{{ url_for('deletar_gasto', id=row.id) }}" method="post">
+                      <form action="{{ url_for('deletar_gasto', id=row.id, page='home') }}" method="post">
                         <div class="col text-center">
                           <button onclick="this.form.submit()" align="center" type="button" class="btn btn-danger btn-sm">x</button> 
                         </div>
@@ -77,7 +77,7 @@
                         <li class="page-item"><a class="page-link" href="{{ url_for('home', page_num=page) }}"> {{page}} </a></li>
                     {% endfor %}
                     {% if rows.has_next %}
-                        <li class="page-item"><a class="page-link" href="{{rows.next_num}}"> Próximo </a></li>
+                        <li class="page-item"><a class="page-link" href="{{ url_for('home', page_num=rows.next_num) }}"> Próximo </a></li>
                     {% endif %}
                 </ul>
             </nav>                

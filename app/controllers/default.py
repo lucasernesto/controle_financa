@@ -1,4 +1,6 @@
+from wsgiref.util import request_uri
 import pendulum, flask, werkzeug
+from sqlalchemy import false
 from pendulum.parsing.exceptions import ParserError
 
 from flask import (
@@ -31,8 +33,10 @@ def index():
     if request.method == "POST":
         user = User.query.filter_by(username=form.username.data).first()
 
-        if form.validate_on_submit() and sha256_crypt.verify(
-            form.password.data, user.password
+        if (
+            user
+            and form.validate_on_submit()
+            and sha256_crypt.verify(form.password.data, user.password)
         ):
             login_user(user)
             return redirect(url_for("home"))
@@ -139,7 +143,6 @@ def login():
 @login_required
 def home(page_num=1):
     form = RegisterGastoForm()
-
     if request.method == "POST":
         if form.validate():
             mes = pendulum.parse(str(form.date.data)).month
@@ -158,7 +161,6 @@ def home(page_num=1):
             db.session.add(new_gasto)
             db.session.commit()
 
-    # TODO fazer pesquisar mes e aparecer os resultador que o usuario deseja
     mes = pendulum.today().month
     ano = pendulum.today().year
     rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).paginate(
@@ -194,25 +196,57 @@ def deletar_gasto(id):
     return redirect(url_for("home"))
 
 
-@app.route("/relatorios")
-def relatorios():
-    return render_template("relatorios.html")
+@app.route("/relatorios", methods=["GET", "POST"])
+@app.route("/relatorios/<int:mes>/<int:page_num>", methods=["GET", "POST"])
+@login_required
+def relatorios(mes=1, page_num=1):
+    ano = pendulum.now().year
+
+    if flask.request.method == "POST":
+        mes = request.form.get("mes")
+        ano = request.form.get("ano")
+        if ano == "":
+            ano = pendulum.now().year
+
+    rows = Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).paginate(
+        per_page=5, page=page_num, error_out=True
+    )
+
+    years = get_years(Gasto.query.filter_by(id_user=current_user.id).all())
+
+    total = get_total(
+        Gasto.query.filter_by(id_user=current_user.id, mes=mes, ano=ano).all(), False
+    )
+
+    return render_template(
+        "relatorios.html", rows=rows, total=total, mes=mes, ano=ano, years=years
+    )
 
 
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
-
     return redirect(url_for("index"))
 
 
-def get_total(rows):
+def get_total(rows, pagamento=True):
     total = 0
     for row in rows:
-        if row.pago:
+        if row.pago and pagamento:
             continue
 
         total += row.valor
 
     return total
+
+
+def get_years(rows):
+    years = []
+    for row in rows:
+        if row.ano in years:
+            continue
+
+        years.append(row.ano)
+
+    return years
